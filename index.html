@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Beats by Dre — Customer Hearing Insights</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --red: #cc0000;
+  --black: #0d0d0d;
+  --dark: #111111;
+  --white: #ffffff;
+  --gray: #f5f5f7;
+  --gray2: #e8e8ed;
+  --gray3: #6e6e73;
+  --border: #d2d2d7;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  font-family: 'Outfit', -apple-system, 'Helvetica Neue', sans-serif;
+  background: var(--white);
+  color: var(--black);
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background: var(--white); }
+::-webkit-scrollbar-thumb { background: var(--red); border-radius:2px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:999;
+  background: rgba(255,255,255,0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  height: 56px;
+  display: flex; align-items:center; justify-content:space-between;
+  padding: 0 40px;
+}
+.nav-logo {
+  font-size: 20px; font-weight:800; letter-spacing:-0.5px; color: var(--black);
+}
+.nav-logo span { color: var(--red); }
+.nav-links { display:flex; gap:0; }
+.nav-links a {
+  font-size:12px; font-weight:500; color: var(--gray3);
+  text-decoration:none; padding:6px 16px; border-radius:20px;
+  transition:all 0.2s; letter-spacing:0.2px;
+}
+.nav-links a:hover, .nav-links a.active { color:var(--black); background:var(--gray2); }
+
+/* ── HERO ── */
+.hero {
+  background: var(--black);
+  min-height: 100vh;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding: 0 80px 100px;
+  position:relative; overflow:hidden;
+}
+.hero::before {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0; height:55%;
+  background: radial-gradient(ellipse at 15% 100%, rgba(204,0,0,0.15) 0%, transparent 55%);
+  pointer-events:none;
+}
+.hero-bg-text {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  font-size: clamp(120px, 20vw, 240px); font-weight:900; letter-spacing:-8px;
+  color: rgba(255,255,255,0.03); white-space:nowrap; user-select:none;
+  pointer-events:none; z-index:0;
+}
+.hero-eyebrow {
+  font-size:11px; font-weight:600; letter-spacing:4px;
+  text-transform:uppercase; color: var(--red); margin-bottom:20px; z-index:1;
+}
+.hero-title {
+  font-size: clamp(52px,7vw,96px); font-weight:900; line-height:1;
+  letter-spacing:-3px; color:var(--white); z-index:1; max-width:800px;
+}
+.hero-title span { color:var(--red); }
+.hero-sub {
+  font-size:17px; color:rgba(255,255,255,0.8); margin-top:28px;
+  max-width:500px; line-height:1.75; z-index:1; font-weight:400;
+}
+.hero-stats {
+  display:flex; gap:0; margin-top:70px; z-index:1;
+  border-top:1px solid rgba(255,255,255,0.12); padding-top:40px;
+}
+.stat-item {
+  flex:1; padding-right:40px; border-right:1px solid rgba(255,255,255,0.12);
+  margin-right:40px;
+}
+.stat-item:last-child { border-right:none; margin-right:0; }
+.stat-num {
+  font-size:clamp(32px,4vw,52px); font-weight:900;
+  letter-spacing:-2px; color:var(--white); line-height:1;
+}
+.stat-num em { color:var(--red); font-style:normal; }
+.stat-label {
+  font-size:11px; color:rgba(255,255,255,0.6); margin-top:8px;
+  letter-spacing:2px; text-transform:uppercase; font-weight:500;
+}
+
+/* ── SECTIONS ── */
+.section {
+  padding: 120px 80px;
+  border-bottom: 1px solid var(--border);
+}
+.section.dark {
+  background: var(--dark);
+  border-bottom: none;
+}
+.section-eyebrow {
+  font-size:10px; font-weight:700; letter-spacing:5px;
+  text-transform:uppercase; color:var(--red); margin-bottom:14px;
+}
+.section-title {
+  font-size:clamp(32px,4vw,52px); font-weight:800;
+  letter-spacing:-2px; line-height:1.05; margin-bottom:12px; color:inherit;
+}
+.section-sub {
+  font-size:15px; color:var(--gray3); margin-bottom:60px;
+  max-width:460px; line-height:1.7; font-weight:400;
+}
+.section.dark .section-sub { color:rgba(255,255,255,0.72); }
+.section.dark .section-title { color:var(--white); }
+.section.dark .section-eyebrow { color:var(--red); }
+
+/* ── PAIN CARDS ── */
+.pain-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:12px;
+}
+.pain-card {
+  background:var(--gray); padding:28px 28px 24px; cursor:pointer;
+  transition:all 0.25s; position:relative; overflow:hidden;
+  border:2px solid transparent; border-radius:16px;
+}
+.pain-card:hover { background:var(--black); color:var(--white); transform:translateY(-2px); box-shadow:0 10px 32px rgba(0,0,0,0.16); }
+.pain-card:hover .pain-freq-label { color:rgba(255,255,255,0.5); }
+.pain-card:hover .pain-bar-wrap { background:rgba(255,255,255,0.1); }
+.pain-card:hover .pain-arrow { color:rgba(255,255,255,0.6); }
+.pain-card.open { background:var(--red); color:var(--white); }
+.pain-card.open .pain-freq-label { color:rgba(255,255,255,0.6); }
+.pain-card.open .pain-bar-wrap { background:rgba(255,255,255,0.2); }
+.pain-card.open .pain-bar { background:var(--white); }
+.pain-card.open .pain-arrow { transform:rotate(90deg); color:var(--white); }
+.pain-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.pain-num { font-size:10px; font-weight:700; letter-spacing:3px; color:var(--red); }
+.pain-card.open .pain-num, .pain-card:hover .pain-num { color:rgba(255,255,255,0.6); }
+.pain-arrow { font-size:20px; color:var(--gray3); transition:transform 0.3s, color 0.3s; }
+.pain-title-text { font-size:18px; font-weight:700; letter-spacing:-0.5px; margin-bottom:16px; line-height:1.2; }
+.pain-bar-wrap { background:var(--gray2); border-radius:4px; height:4px; margin-bottom:10px; overflow:hidden; }
+.pain-bar { height:100%; background:var(--red); border-radius:4px; width:0; transition:width 1.4s cubic-bezier(.17,.67,.35,1); }
+.pain-freq-label { font-size:11px; color:var(--gray3); font-weight:500; }
+.pain-details { max-height:0; overflow:hidden; transition:max-height 0.4s ease, opacity 0.3s; opacity:0; }
+.pain-card.open .pain-details { max-height:220px; opacity:1; }
+.pain-desc-text { font-size:13px; line-height:1.7; margin-top:20px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.92); }
+.pain-quote { font-size:12px; font-style:italic; margin-top:12px; opacity:0.78; }
+
+/* ── CHARTS ── */
+.charts-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.chart-box { background:var(--white); padding:40px; border-radius:16px; border:1px solid var(--border); box-shadow:0 2px 16px rgba(0,0,0,0.04); }
+.chart-label { font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--gray3); margin-bottom:28px; }
+
+/* ── HEARING ── */
+.hearing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.hearing-card {
+  background:rgba(255,255,255,0.07); padding:36px 28px;
+  border:1px solid rgba(255,255,255,0.13); transition:all 0.3s; cursor:default;
+  border-radius:16px;
+}
+.hearing-card:hover { background:rgba(204,0,0,0.12); border-color:rgba(204,0,0,0.4); transform:translateY(-2px); }
+.hearing-icon { font-size:32px; margin-bottom:20px; display:block; }
+.hearing-title { font-size:12px; font-weight:700; color:var(--red); margin-bottom:12px; text-transform:uppercase; letter-spacing:2px; }
+.hearing-body { font-size:13.5px; color:rgba(255,255,255,0.82); line-height:1.8; }
+
+/* ── FILTER ── */
+.filter-bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:32px; }
+.filter-btn {
+  background:transparent; border:1.5px solid var(--border);
+  color:var(--gray3); padding:7px 18px; border-radius:20px;
+  font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s;
+  font-family: inherit;
+}
+.filter-btn:hover { border-color:var(--black); color:var(--black); }
+.filter-btn.active { background:var(--black); border-color:var(--black); color:var(--white); }
+
+/* ── TABLE ── */
+.seg-table-wrap { overflow:hidden; border-radius:14px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+thead tr { background:var(--black); }
+thead th { padding:18px 22px; text-align:left; font-weight:600; color:var(--white); letter-spacing:0.3px; font-size:12px; }
+tbody tr { border-bottom:1px solid var(--border); transition:all 0.25s; }
+tbody tr:last-child { border-bottom:none; }
+tbody tr:hover { background:var(--gray); }
+tbody tr.dimmed { opacity:0.15; }
+tbody tr.highlighted { background:rgba(204,0,0,0.05); }
+tbody tr.highlighted td:first-child { color:var(--red); }
+tbody td { padding:18px 22px; vertical-align:top; line-height:1.7; color:var(--gray3); font-size:13px; }
+tbody td:first-child { font-weight:700; color:var(--black); font-size:14px; }
+.tag { display:inline-block; border-radius:6px; padding:3px 9px; font-size:10px; font-weight:700; margin:2px 2px 2px 0; letter-spacing:0.5px; }
+.tag-r { background:var(--black); color:var(--white); }
+.tag-b { background:var(--gray2); color:var(--black); }
+
+/* ── OPPORTUNITIES ── */
+.opp-list { list-style:none; }
+.opp-item {
+  display:flex; align-items:flex-start; gap:32px;
+  padding:32px 0; border-bottom:1px solid var(--border);
+  transition:all 0.2s; cursor:default;
+}
+.opp-item:last-child { border-bottom:none; }
+.opp-item:hover { padding-left:16px; }
+.opp-num { font-size:11px; font-weight:700; color:var(--red); min-width:24px; margin-top:3px; letter-spacing:1px; }
+.opp-title { font-size:19px; font-weight:700; letter-spacing:-0.5px; margin-bottom:6px; }
+.opp-text { font-size:14px; color:var(--gray3); line-height:1.7; }
+
+/* ── FOOTER ── */
+footer {
+  background:var(--black); padding:60px 80px;
+  display:flex; justify-content:space-between; align-items:flex-start;
+  gap:40px;
+}
+.footer-logo { font-size:28px; font-weight:900; letter-spacing:-1px; color:var(--white); }
+.footer-logo span { color:var(--red); }
+.footer-meta { font-size:11px; color:rgba(255,255,255,0.38); letter-spacing:2px; text-transform:uppercase; line-height:2; text-align:right; }
+
+/* ── FADE IN ── */
+.fade-up { opacity:0; transform:translateY(24px); transition:opacity 0.7s ease, transform 0.7s ease; }
+.fade-up.visible { opacity:1; transform:translateY(0); }
+
+@media print {
+  * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+  nav { display:none !important; }
+  .hero { min-height:auto; padding:60px 60px 80px; page-break-after:always; }
+  .section { padding:60px 60px; page-break-inside:avoid; }
+  .pain-card { break-inside:avoid; }
+  .pain-details { max-height:none !important; opacity:1 !important; }
+  .charts-row { grid-template-columns:1fr 1fr; }
+  .hearing-grid { grid-template-columns:repeat(3,1fr); }
+  body { font-size:12px; }
+  .fade-up { opacity:1 !important; transform:none !important; }
+  .opp-item:hover { padding-left:0; }
+}
+
+@media (max-width:900px) {
+  nav { padding:0 20px; }
+  .nav-links { display:none; }
+  .hero, .section { padding:80px 24px; }
+  .charts-row, .hearing-grid { grid-template-columns:1fr; }
+  footer { flex-direction:column; padding:40px 24px; }
+  .hero-stats { flex-direction:column; gap:24px; }
+  .stat-item { border-right:none; padding-right:0; margin-right:0; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo"><span>b</span>eats</div>
+  <div class="nav-links">
+    <a href="#pain">Pain Points</a>
+    <a href="#charts">Data</a>
+    <a href="#hearing">Hearing</a>
+    <a href="#segments">Segments</a>
+    <a href="#opportunities">Opportunities</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="home">
+  <div class="hero-bg-text">BEATS</div>
+  <div class="hero-eyebrow fade-up">Customer Research · June 2026</div>
+  <h1 class="hero-title fade-up">Hear What<br>Matters<span>.</span></h1>
+  <p class="hero-sub fade-up">A research-backed deep-dive into what customers love, hate, and need from their audio experience — and where Beats leads next.</p>
+  <div class="hero-stats fade-up">
+    <div class="stat-item">
+      <div class="stat-num"><span id="s1">0</span><em>+</em></div>
+      <div class="stat-label">Reviews Analyzed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><span id="s2">0</span></div>
+      <div class="stat-label">Pain Points</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><span id="s3">0</span></div>
+      <div class="stat-label">Segments</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><span id="s4">0</span></div>
+      <div class="stat-label">Opportunities</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAIN POINTS -->
+<section class="section" id="pain">
+  <div class="section-eyebrow fade-up">01 — Pain Points</div>
+  <h2 class="section-title fade-up">What's Not Working.</h2>
+  <p class="section-sub fade-up">Click any card to reveal the full issue, frequency, and a real customer quote.</p>
+  <div class="pain-grid" id="painGrid"></div>
+</section>
+
+<!-- CHARTS -->
+<section class="section" id="charts" style="background:var(--gray); border-bottom:none;">
+  <div class="section-eyebrow fade-up">02 — Data</div>
+  <h2 class="section-title fade-up">The Numbers.</h2>
+  <p class="section-sub fade-up">Frequency and impact across the top pain points — visualized.</p>
+  <div class="charts-row fade-up">
+    <div class="chart-box">
+      <div class="chart-label">Radar — Frequency by Issue</div>
+      <canvas id="radarChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <div class="chart-label">Bar — Impact Ranking</div>
+      <canvas id="barChart"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- HEARING -->
+<section class="section dark" id="hearing">
+  <div class="section-eyebrow fade-up">03 — Hearing Health</div>
+  <h2 class="section-title fade-up">The Real Issue.</h2>
+  <p class="section-sub fade-up">Beyond product features — these are the hearing health risks our customers live with every day.</p>
+  <div class="hearing-grid" id="hearingGrid"></div>
+</section>
+
+<!-- SEGMENTS -->
+<section class="section" id="segments">
+  <div class="section-eyebrow fade-up">04 — Segments</div>
+  <h2 class="section-title fade-up">Who We're Talking To.</h2>
+  <p class="section-sub fade-up">Filter by customer type to isolate their specific pain points and what actually helps them.</p>
+  <div class="filter-bar" id="filterBar"></div>
+  <div class="seg-table-wrap fade-up">
+    <table>
+      <thead>
+        <tr>
+          <th>Segment</th>
+          <th>Key Pain Points</th>
+          <th>What They Prefer</th>
+          <th>Features That Help</th>
+        </tr>
+      </thead>
+      <tbody id="segTable"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- OPPORTUNITIES -->
+<section class="section" id="opportunities" style="background:var(--white);">
+  <div class="section-eyebrow fade-up">05 — Opportunities</div>
+  <h2 class="section-title fade-up">Where Beats Leads Next.</h2>
+  <p class="section-sub fade-up">Actionable product and brand directions rooted in what customers actually need.</p>
+  <ul class="opp-list" id="oppList"></ul>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo"><span>b</span>eats by Dre</div>
+  </div>
+  <div class="footer-meta">
+    Customer Hearing Insights Report<br>
+    June 2026 &nbsp;·&nbsp; Confidential<br>
+    Basheer Khan
+  </div>
+</footer>
+
+<script>
+const painPoints = [
+  { num:"01", title:"Comfort & Pressure", freq:92, freqLabel:"92% mention this", desc:"Headphones feel heavy, clamp too tightly, or cause ear/head pressure during long sessions — the single most recurring complaint across all brands.", quote:'"The headphones are very good but uncomfortable after an hour."' },
+  { num:"02", title:"Bluetooth Drops", freq:88, freqLabel:"88% mention this", desc:"Audio cuts out, devices disconnect, or pairing is unreliable — especially flagged for AirPods and Bose models.", quote:'"After initial connection I experienced no less than 4 connectivity issues."' },
+  { num:"03", title:"Battery Life", freq:81, freqLabel:"81% mention this", desc:"Battery drains faster than expected, case charging is problematic, or capacity degrades noticeably after 6–12 months.", quote:'"AirPods Case battery drain scared me."' },
+  { num:"04", title:"ANC Inconsistency", freq:79, freqLabel:"79% mention this", desc:"Active Noise Cancellation doesn't block enough real-world noise or performs inconsistently across environments.", quote:'"The noise cancellation is worse than the Bose QuietComfort Ultra 2."' },
+  { num:"05", title:"Price vs. Value", freq:74, freqLabel:"74% mention this", desc:"Customers feel the sound, comfort, or feature set doesn't justify the premium price — especially for Beats Studio Pro.", quote:'"The price point didn\'t align with their expectations at all."' },
+  { num:"06", title:"Sound Tuning", freq:70, freqLabel:"70% mention this", desc:"Bass is too dominant, vocals lack clarity, or the sound doesn't match the price versus Sony and Bose alternatives.", quote:'"Too bassy and slightly overwhelming for anything other than hip-hop."' },
+  { num:"07", title:"Controls & Usability", freq:62, freqLabel:"62% mention this", desc:"Touch controls misfire, physical buttons feel awkward, or on-device controls are unreliable during workouts and commutes.", quote:'"When I tried to fast-forward, it skipped to the next track instead."' },
+  { num:"08", title:"App & Software", freq:58, freqLabel:"58% mention this", desc:"Companion apps look outdated, crash during updates, or add friction rather than value.", quote:'"The Sony app looks ugly and crashes every other update."' },
+  { num:"09", title:"Durability", freq:55, freqLabel:"55% mention this", desc:"Hinges, earpads, or headband shows wear faster than expected — users cite build fragility alongside value complaints.", quote:'"Durability was a recurring pain point across all premium models."' },
+  { num:"10", title:"Fit & Compatibility", freq:51, freqLabel:"51% mention this", desc:"Earbuds don't sit stably, rotate out, or feel incompatible with certain ear shapes — especially noted in Bose earbuds.", quote:'"They are bulky and the shape seems to favor some ears over others."' },
+];
+
+const hearingData = [
+  { icon:"🔊", title:"Noise-Induced Loss", body:"High-volume listening over extended sessions causes permanent damage that builds silently — particularly in users under 35 who wear headphones for hours daily." },
+  { icon:"🔔", title:"Tinnitus", body:"Existing ringing or sensitivity is worsened by harsh sound and high volumes. A bad fit forces volume up, compounding the damage with every session." },
+  { icon:"👂", title:"Age-Related Loss", body:"Older listeners lose high-frequency hearing first. They need treble clarity and speech-first tuning to hear detail without pushing volume to unsafe levels." },
+  { icon:"🌊", title:"Background Masking", body:"Open or poorly-sealed designs force users to raise volume in noisy spaces — directly increasing cumulative hearing risk without them realizing it." },
+  { icon:"😓", title:"Listening Fatigue", body:"Heavy bass tuning and poor ergonomics cause ear fatigue quickly. Harsh resonance makes users remove headphones early, reducing productive listening time." },
+  { icon:"🗣", title:"Speech Clarity Gaps", body:"For hearing-impaired users, voices matter more than bass. Most consumer headphones tune for 'fun' sound, leaving this segment completely underserved." },
+];
+
+const segments = [
+  { name:"Casual Listener", pain:"Price vs. value, sound tuning, battery life", pref:"Easy to use, good bass, wireless freedom", tags:[["Long Battery","r"],["Simple Controls","b"],["BT Stability","b"]] },
+  { name:"Daily Commuter", pain:"Connectivity drops, ANC inconsistency, comfort", pref:"Strong ANC, reliable pairing, all-day comfort", tags:[["ANC","r"],["Over-Ear Seal","b"],["Multipoint BT","b"]] },
+  { name:"Mild Hearing Loss", pain:"Speech clarity, needing higher volume, masking", pref:"Treble boost, speech-first tuning, clarity at low volume", tags:[["Custom EQ","r"],["Speech Preset","b"],["Noise Canceling","b"]] },
+  { name:"Tinnitus / Sensitive", pain:"Harsh highs, ear pressure, long-session fatigue", pref:"Gentle tuning, soft pads, volume limits", tags:[["Volume Limiter","r"],["Soft Pads","b"],["Low Fatigue Mode","b"]] },
+  { name:"Older Listener (50+)", pain:"Difficult controls, unclear voices, app complexity", pref:"Simple UI, vocal clarity, comfortable fit", tags:[["Treble Boost","r"],["Large Controls","b"],["No-App Setup","b"]] },
+  { name:"Heavy User / Pro", pain:"Durability, software bugs, sound accuracy", pref:"Flat EQ, reliable firmware, premium build", tags:[["Replaceable Pads","r"],["Firmware Updates","b"],["Flat Tuning","b"]] },
+];
+
+const opportunities = [
+  { title:"Hearing-Aware Presets", text:'Introduce app-based EQ presets — "Speech", "Clear Voice", and "Low Fatigue" — targeting users with hearing differences or sensitivity.' },
+  { title:"Safe-Listening Alerts", text:"Add volume time reminders and smart alerts to reduce noise-induced hearing risk, especially for younger daily users spending 4+ hours in headphones." },
+  { title:"Comfort-First Engineering", text:"Redesign cushioning and clamp pressure to address the #1 recurring complaint — comfort after extended wear — across all product lines." },
+  { title:"Hearing-Aware Mode", text:"Build a mode that intelligently lowers volume in quieter environments so users stop compensating by cranking it up in noisy spaces." },
+  { title:"Treble Clarity Options", text:"Offer dedicated tuning for users with age-related hearing loss who need better speech definition and detail at safe, lower volumes." },
+  { title:"App Redesign", text:"Rebuild the Beats app with a clean, frictionless UI — competitors like Sony are actively losing users over poor software experience, and this is a clear win." },
+  { title:"Ear Health Positioning", text:"Own the narrative: position Beats as the brand that protects your hearing, not just moves it — a meaningful, ownable differentiator in a crowded market." },
+];
+
+// BUILD PAIN CARDS
+const pg = document.getElementById('painGrid');
+painPoints.forEach(p => {
+  const c = document.createElement('div');
+  c.className = 'pain-card fade-up';
+  c.innerHTML = `
+    <div class="pain-header">
+      <span class="pain-num">${p.num}</span>
+      <span class="pain-arrow">›</span>
+    </div>
+    <div class="pain-title-text">${p.title}</div>
+    <div class="pain-bar-wrap"><div class="pain-bar" data-width="${p.freq}"></div></div>
+    <div class="pain-freq-label">${p.freqLabel}</div>
+    <div class="pain-details">
+      <div class="pain-desc-text">${p.desc}</div>
+      <div class="pain-quote">${p.quote}</div>
+    </div>`;
+  c.addEventListener('click', () => {
+    const wasOpen = c.classList.contains('open');
+    document.querySelectorAll('.pain-card').forEach(x => x.classList.remove('open'));
+    if (!wasOpen) c.classList.add('open');
+  });
+  pg.appendChild(c);
+});
+
+// BUILD HEARING
+const hg = document.getElementById('hearingGrid');
+hearingData.forEach(h => {
+  const d = document.createElement('div');
+  d.className = 'hearing-card fade-up';
+  d.innerHTML = `<span class="hearing-icon">${h.icon}</span><div class="hearing-title">${h.title}</div><div class="hearing-body">${h.body}</div>`;
+  hg.appendChild(d);
+});
+
+// BUILD TABLE + FILTERS
+const tb = document.getElementById('segTable');
+segments.forEach(s => {
+  const tr = document.createElement('tr');
+  tr.dataset.seg = s.name;
+  tr.innerHTML = `
+    <td>${s.name}</td>
+    <td>${s.pain}</td>
+    <td>${s.pref}</td>
+    <td>${s.tags.map(([t,c])=>`<span class="tag tag-${c}">${t}</span>`).join('')}</td>`;
+  tb.appendChild(tr);
+});
+
+const fb = document.getElementById('filterBar');
+['All',...segments.map(s=>s.name)].forEach(name => {
+  const btn = document.createElement('button');
+  btn.className = 'filter-btn' + (name==='All'?' active':'');
+  btn.textContent = name;
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#segTable tr').forEach(row => {
+      if (name==='All') { row.classList.remove('dimmed','highlighted'); }
+      else if (row.dataset.seg===name) { row.classList.remove('dimmed'); row.classList.add('highlighted'); }
+      else { row.classList.remove('highlighted'); row.classList.add('dimmed'); }
+    });
+  });
+  fb.appendChild(btn);
+});
+
+// BUILD OPPORTUNITIES
+const ol = document.getElementById('oppList');
+opportunities.forEach((o,i) => {
+  const li = document.createElement('li');
+  li.className = 'opp-item fade-up';
+  li.innerHTML = `<span class="opp-num">0${i+1}</span><div><div class="opp-title">${o.title}</div><div class="opp-text">${o.text}</div></div>`;
+  ol.appendChild(li);
+});
+
+// CHARTS
+const chartDefaults = {
+  grid: 'rgba(0,0,0,0.06)',
+  text: '#6e6e73',
+  fill: 'rgba(204,0,0,0.1)',
+};
+
+new Chart(document.getElementById('radarChart'), {
+  type:'radar',
+  data:{
+    labels: painPoints.slice(0,8).map(p=>p.title),
+    datasets:[{ label:'Frequency %', data:painPoints.slice(0,8).map(p=>p.freq),
+      backgroundColor:chartDefaults.fill, borderColor:'#cc0000',
+      borderWidth:2, pointBackgroundColor:'#cc0000', pointRadius:4, pointHoverRadius:6 }]
+  },
+  options:{ responsive:true, plugins:{legend:{display:false}},
+    scales:{ r:{ beginAtZero:true, max:100,
+      grid:{color:chartDefaults.grid}, angleLines:{color:chartDefaults.grid},
+      pointLabels:{color:chartDefaults.text, font:{size:10, weight:'600'}},
+      ticks:{display:false} } } }
+});
+
+new Chart(document.getElementById('barChart'), {
+  type:'bar',
+  data:{
+    labels: painPoints.slice(0,8).map(p=>p.title),
+    datasets:[{ label:'Frequency %', data:painPoints.slice(0,8).map(p=>p.freq),
+      backgroundColor: painPoints.slice(0,8).map((_,i)=>i===0?'#cc0000':'#1d1d1f'),
+      borderRadius:6, borderSkipped:false }]
+  },
+  options:{ indexAxis:'y', responsive:true, plugins:{legend:{display:false}},
+    scales:{
+      x:{beginAtZero:true, max:100, grid:{color:chartDefaults.grid}, ticks:{color:chartDefaults.text, font:{size:10}}},
+      y:{grid:{display:false}, ticks:{color:chartDefaults.text, font:{size:10, weight:'600'}}}
+    } }
+});
+
+// COUNTERS
+function counter(id, target, dur=2000) {
+  const el = document.getElementById(id);
+  let s=0, step=target/(dur/16);
+  const go=()=>{ s=Math.min(s+step,target); el.textContent=Math.floor(s).toLocaleString(); if(s<target) requestAnimationFrame(go); };
+  requestAnimationFrame(go);
+}
+setTimeout(()=>{ counter('s1',14038); counter('s2',10); counter('s3',6); counter('s4',7); }, 300);
+
+// SCROLL OBSERVER
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      e.target.querySelectorAll('.pain-bar').forEach(b => { b.style.width = b.dataset.width+'%'; });
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold:0.08 });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+// NAV ACTIVE
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let cur='';
+  document.querySelectorAll('section, .hero').forEach(s => { if(window.scrollY >= s.offsetTop-120) cur=s.id; });
+  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href')==='#'+cur));
+});
+</script>
+</body>
+</html>
