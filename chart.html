@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Beats by Dre — Pain Point Visual Chart</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --red: #cc0000;
+  --black: #080808;
+  --dark: #101010;
+  --card: #141414;
+  --card2: #1a1a1a;
+  --white: #ffffff;
+  --gray: #f5f5f7;
+  --muted: #888888;
+  --border: #242424;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  font-family:'Outfit', -apple-system, sans-serif;
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--red); border-radius:2px; }
+
+/* ── HEADER ── */
+header {
+  padding: 52px 72px 48px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 24px;
+  position: relative;
+}
+header::before {
+  content:'';
+  position:absolute; left:0; top:0; bottom:0; width:5px;
+  background: var(--red);
+}
+.brand { font-size:22px; font-weight:900; letter-spacing:-0.5px; }
+.brand span { color: var(--red); }
+.header-right { text-align:right; }
+.header-title {
+  font-size: clamp(28px, 3.5vw, 48px);
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1.05;
+}
+.header-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* ── STATS STRIP ── */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--border);
+}
+.stat-cell {
+  padding: 36px 40px;
+  border-right: 1px solid var(--border);
+}
+.stat-cell:last-child { border-right: none; }
+.stat-cell:first-child { border-left: 5px solid var(--red); }
+.stat-big {
+  font-size: clamp(36px, 3.5vw, 52px);
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1;
+  color: var(--white);
+}
+.stat-big em { color: var(--red); font-style:normal; }
+.stat-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 10px;
+}
+
+/* ── MAIN GRID ── */
+.main { padding: 64px 72px; }
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 12px;
+}
+.section-title {
+  font-size: clamp(22px, 2.5vw, 34px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 32px;
+}
+
+/* charts row */
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.chart-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 36px 36px 28px;
+}
+.chart-card-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+.chart-wrap {
+  position: relative;
+  width: 100%;
+}
+
+/* ── WORD CLOUD ── */
+.cloud-section {
+  margin-bottom: 16px;
+}
+.cloud-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 48px;
+  position: relative;
+  overflow: hidden;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cloud-card::before {
+  content:'';
+  position:absolute; left:0; top:0; bottom:0; width:4px;
+  background: var(--red);
+  border-radius: 18px 0 0 18px;
+}
+.word-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  justify-content: center;
+  align-items: center;
+  max-width: 900px;
+}
+.cloud-word {
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--white);
+  opacity: 0;
+  animation: wordFadeIn 0.6s ease forwards, wordPulse 3s ease-in-out infinite;
+  cursor: default;
+  transition: color 0.2s;
+}
+.cloud-word:hover { color: var(--red); }
+
+@keyframes wordFadeIn {
+  from { opacity:0; transform: translateY(10px) scale(0.9); }
+  to   { opacity:1; transform: translateY(0)   scale(1); }
+}
+@keyframes wordPulse {
+  0%,100% { transform: scale(1); }
+  50%      { transform: scale(1.04); }
+}
+
+/* ── INSIGHT CARDS ── */
+.insights-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.insight-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 32px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.insight-card:hover { border-color: var(--red); transform: translateY(-2px); }
+.insight-card::after {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:3px;
+  background: var(--red);
+  border-radius: 18px 18px 0 0;
+}
+.insight-tag {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 12px;
+}
+.insight-headline {
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+.insight-headline em { color: var(--red); font-style:normal; }
+.insight-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+/* ── SOURCES ── */
+.sources-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 32px 40px;
+  margin-bottom: 64px;
+}
+.sources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px 32px;
+  margin-top: 16px;
+}
+.source-item {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  line-height: 1.55;
+}
+.source-dot {
+  width: 5px; height: 5px;
+  background: var(--red);
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 72px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-logo { font-size:16px; font-weight:900; letter-spacing:-0.5px; }
+.footer-logo span { color: var(--red); }
+.footer-meta { font-size:10px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; }
+
+/* ── DOWNLOAD BTN ── */
+.dl-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: var(--red);
+  color: var(--white);
+  border: none;
+  border-radius: 100px;
+  padding: 12px 24px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+  box-shadow: 0 8px 24px rgba(204,0,0,0.35);
+  transition: all 0.2s;
+  z-index: 99;
+}
+.dl-btn:hover { background: #aa0000; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(204,0,0,0.45); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  header, .main, footer { padding-left: 24px; padding-right: 24px; }
+  .charts-row, .insights-row { grid-template-columns: 1fr; }
+  .stats-strip { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div>
+    <div class="brand"><span>b</span>eats by Dre</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Externship 2026 · Basheer Khan</div>
+  </div>
+  <div class="header-right">
+    <div class="header-title">Pain Point<br>Visual Chart</div>
+    <div class="header-sub">Customer Hearing Insights · June 2026</div>
+  </div>
+</header>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-cell">
+    <div class="stat-big"><span id="c1">0</span><em>+</em></div>
+    <div class="stat-lbl">Reviews Analyzed</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-big"><span id="c2">0</span></div>
+    <div class="stat-lbl">Pain Points Identified</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-big"><span id="c3">0</span><em>%</em></div>
+    <div class="stat-lbl">Avg. Mention Rate</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-big"><span id="c4">0</span><em>%</em></div>
+    <div class="stat-lbl">Top Pain Point Score</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- CHARTS -->
+  <div style="margin-bottom:8px;">
+    <div class="section-label">01 — Visualizations</div>
+    <div class="section-title">Pain Point Charts.</div>
+  </div>
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-card-label">Radar — Frequency by Issue</div>
+      <div class="chart-wrap" style="max-height:380px;">
+        <canvas id="radarChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-label">Bar — Impact Ranking (% Mention Rate)</div>
+      <div class="chart-wrap">
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORD CLOUD -->
+  <div class="cloud-section" style="margin-top:48px;margin-bottom:8px;">
+    <div class="section-label">02 — Word Cloud</div>
+    <div class="section-title">What Customers Talk About.</div>
+  </div>
+  <div class="cloud-card">
+    <div class="word-cloud" id="wordCloud"></div>
+  </div>
+
+  <!-- INSIGHT CARDS -->
+  <div style="margin-top:48px;margin-bottom:8px;">
+    <div class="section-label">03 — Key Takeaways</div>
+    <div class="section-title">What the Data Tells Us.</div>
+  </div>
+  <div class="insights-row">
+    <div class="insight-card">
+      <div class="insight-tag">Top Concern</div>
+      <div class="insight-headline">92<em>%</em></div>
+      <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:10px;">Comfort & Pressure</div>
+      <div class="insight-desc">Nearly every customer flags physical discomfort as their primary frustration. This is not a niche complaint — it's universal across every brand and price point reviewed.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-tag">Average Score</div>
+      <div class="insight-headline">71<em>%</em></div>
+      <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:10px;">Across All Issues</div>
+      <div class="insight-desc">On average, 71% of customers mention each pain point. No issue is isolated — the majority of buyers experience multiple frustrations, making holistic improvement essential.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-tag">Lowest Concern</div>
+      <div class="insight-headline">51<em>%</em></div>
+      <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:10px;">Fit & Compatibility</div>
+      <div class="insight-desc">Even the least-mentioned pain point affects over half of all customers. This signals a massive opportunity: fixing the bottom of the list still impacts millions of users.</div>
+    </div>
+  </div>
+
+  <!-- SOURCES -->
+  <div style="margin-top:48px;margin-bottom:8px;">
+    <div class="section-label">04 — Sources</div>
+    <div class="section-title">Data Referenced.</div>
+  </div>
+  <div class="sources-card">
+    <div class="sources-grid">
+      <div class="source-item"><div class="source-dot"></div><span>Amazon customer reviews — Apple AirPods Pro (2nd Gen), 14,000+ verified reviews</span></div>
+      <div class="source-item"><div class="source-dot"></div><span>Amazon customer reviews — Beats Studio Pro, 3,200+ verified reviews</span></div>
+      <div class="source-item"><div class="source-dot"></div><span>Amazon customer reviews — Sony WH-1000XM5, 8,500+ verified reviews</span></div>
+      <div class="source-item"><div class="source-dot"></div><span>Amazon customer reviews — Bose QuietComfort Ultra, 4,100+ verified reviews</span></div>
+      <div class="source-item"><div class="source-dot"></div><span>Perplexity AI — aggregated review analysis & frequency scoring, June 2026</span></div>
+      <div class="source-item"><div class="source-dot"></div><span>Claude LLM — customer segment identification & insight synthesis, June 2026</span></div>
+      <div class="source-item"><div class="source-dot"></div><span>WHO — World Health Organization hearing loss statistics (1.5B people affected globally)</span></div>
+      <div class="source-item"><div class="source-dot"></div><span>Beats by Dre Externship 2026 — Basheer Khan, Customer Research Report</span></div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>b</span>eats by Dre</div>
+  <div class="footer-meta">Pain Point Visual Chart · June 2026 · Confidential · Basheer Khan</div>
+</footer>
+
+<button class="dl-btn" onclick="downloadHTML()">Download Chart</button>
+
+<script>
+// ── DATA ────────────────────────────────────────────────────────────────────
+const painPoints = [
+  { label:"Comfort & Pressure",  pct:92 },
+  { label:"Bluetooth Drops",      pct:88 },
+  { label:"Battery Life",         pct:81 },
+  { label:"ANC Inconsistency",    pct:79 },
+  { label:"Price vs. Value",      pct:74 },
+  { label:"Sound Tuning",         pct:70 },
+  { label:"Controls & Usability", pct:62 },
+  { label:"App & Software",       pct:58 },
+  { label:"Durability",           pct:55 },
+  { label:"Fit & Compatibility",  pct:51 },
+];
+
+const labels = painPoints.map(p => p.label);
+const data   = painPoints.map(p => p.pct);
+const avg    = Math.round(data.reduce((a,b)=>a+b,0)/data.length);
+
+// ── COUNTERS ────────────────────────────────────────────────────────────────
+function counter(id, target, suffix='', dur=1800) {
+  const el = document.getElementById(id);
+  let v=0, step=target/(dur/16);
+  const go=()=>{ v=Math.min(v+step,target); el.textContent=Math.floor(v).toLocaleString(); if(v<target) requestAnimationFrame(go); };
+  requestAnimationFrame(go);
+}
+setTimeout(()=>{
+  counter('c1',14038);
+  counter('c2',10);
+  counter('c3',avg);
+  counter('c4',92);
+},400);
+
+// ── RADAR CHART ─────────────────────────────────────────────────────────────
+new Chart(document.getElementById('radarChart'), {
+  type: 'radar',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Mention %',
+      data: data,
+      backgroundColor: 'rgba(204,0,0,0.12)',
+      borderColor: '#cc0000',
+      borderWidth: 2,
+      pointBackgroundColor: '#cc0000',
+      pointRadius: 4,
+      pointHoverRadius: 7,
+      pointBorderColor: '#080808',
+      pointBorderWidth: 2,
+    }]
+  },
+  options: {
+    responsive: true,
+    animation: { duration: 1200, easing: 'easeOutQuart' },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#141414',
+        borderColor: '#cc0000',
+        borderWidth: 1,
+        titleColor: '#fff',
+        bodyColor: '#888',
+        titleFont: { family:'Outfit', weight:'700', size:13 },
+        bodyFont:  { family:'Outfit', size:12 },
+        callbacks: { label: ctx => ` ${ctx.raw}% of customers` }
+      }
+    },
+    scales: {
+      r: {
+        min: 0, max: 100,
+        grid: { color: 'rgba(255,255,255,0.06)' },
+        angleLines: { color: 'rgba(255,255,255,0.06)' },
+        pointLabels: {
+          color: '#888',
+          font: { family:'Outfit', size:10, weight:'600' }
+        },
+        ticks: { display:false, stepSize:25 }
+      }
+    }
+  }
+});
+
+// ── BAR CHART ───────────────────────────────────────────────────────────────
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Mention %',
+      data: data,
+      backgroundColor: data.map((v,i) => i===0 ? '#cc0000' : '#1e1e1e'),
+      hoverBackgroundColor: data.map((v,i) => i===0 ? '#dd0000' : '#2e2e2e'),
+      borderRadius: 6,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    animation: { duration:1400, easing:'easeOutQuart', delay: ctx => ctx.dataIndex * 60 },
+    plugins: {
+      legend: { display:false },
+      tooltip: {
+        backgroundColor: '#141414',
+        borderColor: '#cc0000',
+        borderWidth: 1,
+        titleColor: '#fff',
+        bodyColor: '#888',
+        titleFont: { family:'Outfit', weight:'700', size:13 },
+        bodyFont:  { family:'Outfit', size:12 },
+        callbacks: { label: ctx => ` ${ctx.raw}% mention rate` }
+      }
+    },
+    scales: {
+      x: {
+        beginAtZero: true, max: 100,
+        grid: { color:'rgba(255,255,255,0.05)' },
+        ticks: {
+          color:'#555', font:{ family:'Outfit', size:10 },
+          callback: v => v+'%'
+        },
+        border: { color:'transparent' }
+      },
+      y: {
+        grid: { display:false },
+        ticks: { color:'#aaa', font:{ family:'Outfit', size:11, weight:'500' } },
+        border: { color:'transparent' }
+      }
+    }
+  }
+});
+
+// ── WORD CLOUD ───────────────────────────────────────────────────────────────
+const words = [
+  { word:'Comfort',      size:52, delay:0.0 },
+  { word:'Bluetooth',    size:44, delay:0.1 },
+  { word:'Battery',      size:40, delay:0.2 },
+  { word:'Noise Cancel', size:36, delay:0.3 },
+  { word:'Price',        size:34, delay:0.4 },
+  { word:'Bass',         size:30, delay:0.5 },
+  { word:'Durability',   size:28, delay:0.6 },
+  { word:'Controls',     size:26, delay:0.7 },
+  { word:'Fit',          size:24, delay:0.8 },
+  { word:'App',          size:22, delay:0.9 },
+];
+
+const wc = document.getElementById('wordCloud');
+const alphas = [1, 0.85, 0.72, 0.62, 0.55, 0.48, 0.42, 0.36, 0.30, 0.26];
+
+words.forEach((w, i) => {
+  const span = document.createElement('span');
+  span.className = 'cloud-word';
+  span.textContent = w.word;
+  span.style.cssText = `
+    font-size:${w.size}px;
+    opacity:0;
+    color:rgba(255,255,255,${alphas[i]});
+    animation-delay:${w.delay + 0.3}s, ${1.5 + w.delay}s;
+    animation-duration:0.6s, ${2.8 + i * 0.2}s;
+  `;
+  span.addEventListener('mouseenter', () => span.style.color='#cc0000');
+  span.addEventListener('mouseleave', () => span.style.color=`rgba(255,255,255,${alphas[i]})`);
+  wc.appendChild(span);
+});
+
+// ── DOWNLOAD ─────────────────────────────────────────────────────────────────
+function downloadHTML() {
+  const blob = new Blob([document.documentElement.outerHTML], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Beats_Pain_Point_Chart.html';
+  a.click();
+}
+</script>
+</body>
+</html>
