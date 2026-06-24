@@ -44,13 +44,11 @@ nav {
   display: flex; align-items:center; justify-content:space-between;
   padding: 0 40px;
 }
-.nav-logo {
-  font-size: 20px; font-weight:800; letter-spacing:-0.5px; color: var(--black);
-}
-.nav-logo span { color: var(--red); }
+.nav-logo { font-size:20px; font-weight:800; letter-spacing:-0.5px; color:var(--black); }
+.nav-logo span { color:var(--red); }
 .nav-links { display:flex; gap:0; }
 .nav-links a {
-  font-size:12px; font-weight:500; color: var(--gray3);
+  font-size:12px; font-weight:500; color:var(--gray3);
   text-decoration:none; padding:6px 16px; border-radius:20px;
   transition:all 0.2s; letter-spacing:0.2px;
 }
@@ -72,71 +70,33 @@ nav {
 }
 .hero-bg-text {
   position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  font-size: clamp(120px, 20vw, 240px); font-weight:900; letter-spacing:-8px;
-  color: rgba(255,255,255,0.03); white-space:nowrap; user-select:none;
+  font-size:clamp(120px,20vw,240px); font-weight:900; letter-spacing:-8px;
+  color:rgba(255,255,255,0.03); white-space:nowrap; user-select:none;
   pointer-events:none; z-index:0;
 }
-.hero-eyebrow {
-  font-size:11px; font-weight:600; letter-spacing:4px;
-  text-transform:uppercase; color: var(--red); margin-bottom:20px; z-index:1;
-}
-.hero-title {
-  font-size: clamp(52px,7vw,96px); font-weight:900; line-height:1;
-  letter-spacing:-3px; color:var(--white); z-index:1; max-width:800px;
-}
+.hero-eyebrow { font-size:11px; font-weight:600; letter-spacing:4px; text-transform:uppercase; color:var(--red); margin-bottom:20px; z-index:1; }
+.hero-title { font-size:clamp(52px,7vw,96px); font-weight:900; line-height:1; letter-spacing:-3px; color:var(--white); z-index:1; max-width:800px; }
 .hero-title span { color:var(--red); }
-.hero-sub {
-  font-size:17px; color:rgba(255,255,255,0.8); margin-top:28px;
-  max-width:500px; line-height:1.75; z-index:1; font-weight:400;
-}
-.hero-stats {
-  display:flex; gap:0; margin-top:70px; z-index:1;
-  border-top:1px solid rgba(255,255,255,0.12); padding-top:40px;
-}
-.stat-item {
-  flex:1; padding-right:40px; border-right:1px solid rgba(255,255,255,0.12);
-  margin-right:40px;
-}
+.hero-sub { font-size:17px; color:rgba(255,255,255,0.8); margin-top:28px; max-width:500px; line-height:1.75; z-index:1; font-weight:400; }
+.hero-stats { display:flex; gap:0; margin-top:70px; z-index:1; border-top:1px solid rgba(255,255,255,0.12); padding-top:40px; }
+.stat-item { flex:1; padding-right:40px; border-right:1px solid rgba(255,255,255,0.12); margin-right:40px; }
 .stat-item:last-child { border-right:none; margin-right:0; }
-.stat-num {
-  font-size:clamp(32px,4vw,52px); font-weight:900;
-  letter-spacing:-2px; color:var(--white); line-height:1;
-}
+.stat-num { font-size:clamp(32px,4vw,52px); font-weight:900; letter-spacing:-2px; color:var(--white); line-height:1; }
 .stat-num em { color:var(--red); font-style:normal; }
-.stat-label {
-  font-size:11px; color:rgba(255,255,255,0.6); margin-top:8px;
-  letter-spacing:2px; text-transform:uppercase; font-weight:500;
-}
+.stat-label { font-size:11px; color:rgba(255,255,255,0.6); margin-top:8px; letter-spacing:2px; text-transform:uppercase; font-weight:500; }
 
 /* ── SECTIONS ── */
-.section {
-  padding: 120px 80px;
-  border-bottom: 1px solid var(--border);
-}
-.section.dark {
-  background: var(--dark);
-  border-bottom: none;
-}
-.section-eyebrow {
-  font-size:10px; font-weight:700; letter-spacing:5px;
-  text-transform:uppercase; color:var(--red); margin-bottom:14px;
-}
-.section-title {
-  font-size:clamp(32px,4vw,52px); font-weight:800;
-  letter-spacing:-2px; line-height:1.05; margin-bottom:12px; color:inherit;
-}
-.section-sub {
-  font-size:15px; color:var(--gray3); margin-bottom:60px;
-  max-width:460px; line-height:1.7; font-weight:400;
-}
+.section { padding:120px 80px; border-bottom:1px solid var(--border); }
+.section.dark { background:var(--dark); border-bottom:none; }
+.section-eyebrow { font-size:10px; font-weight:700; letter-spacing:5px; text-transform:uppercase; color:var(--red); margin-bottom:14px; }
+.section-title { font-size:clamp(32px,4vw,52px); font-weight:800; letter-spacing:-2px; line-height:1.05; margin-bottom:12px; color:inherit; }
+.section-sub { font-size:15px; color:var(--gray3); margin-bottom:60px; max-width:460px; line-height:1.7; font-weight:400; }
 .section.dark .section-sub { color:rgba(255,255,255,0.72); }
 .section.dark .section-title { color:var(--white); }
 .section.dark .section-eyebrow { color:var(--red); }
 
 /* ── PAIN CARDS ── */
-.pain-grid {
-  display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:12px;
-}
+.pain-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
 .pain-card {
   background:var(--gray); padding:28px 28px 24px; cursor:pointer;
   transition:all 0.25s; position:relative; overflow:hidden;
@@ -173,8 +133,7 @@ nav {
 .hearing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
 .hearing-card {
   background:rgba(255,255,255,0.07); padding:36px 28px;
-  border:1px solid rgba(255,255,255,0.13); transition:all 0.3s; cursor:default;
-  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.13); transition:all 0.3s; cursor:default; border-radius:16px;
 }
 .hearing-card:hover { background:rgba(204,0,0,0.12); border-color:rgba(204,0,0,0.4); transform:translateY(-2px); }
 .hearing-icon { font-size:32px; margin-bottom:20px; display:block; }
@@ -186,8 +145,7 @@ nav {
 .filter-btn {
   background:transparent; border:1.5px solid var(--border);
   color:var(--gray3); padding:7px 18px; border-radius:20px;
-  font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s;
-  font-family: inherit;
+  font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s; font-family:inherit;
 }
 .filter-btn:hover { border-color:var(--black); color:var(--black); }
 .filter-btn.active { background:var(--black); border-color:var(--black); color:var(--white); }
@@ -211,22 +169,43 @@ tbody td:first-child { font-weight:700; color:var(--black); font-size:14px; }
 
 /* ── OPPORTUNITIES ── */
 .opp-list { list-style:none; }
-.opp-item {
-  display:flex; align-items:flex-start; gap:32px;
-  padding:32px 0; border-bottom:1px solid var(--border);
-  transition:all 0.2s; cursor:default;
-}
+.opp-item { display:flex; align-items:flex-start; gap:32px; padding:32px 0; border-bottom:1px solid var(--border); transition:all 0.2s; cursor:default; }
 .opp-item:last-child { border-bottom:none; }
 .opp-item:hover { padding-left:16px; }
 .opp-num { font-size:11px; font-weight:700; color:var(--red); min-width:24px; margin-top:3px; letter-spacing:1px; }
 .opp-title { font-size:19px; font-weight:700; letter-spacing:-0.5px; margin-bottom:6px; }
 .opp-text { font-size:14px; color:var(--gray3); line-height:1.7; }
 
+/* ── REFLECTION ── */
+.ref-meta {
+  display:flex; gap:32px; flex-wrap:wrap; margin-bottom:40px;
+  padding:22px 28px; background:var(--white); border-radius:14px; border:1px solid var(--border);
+}
+.ref-meta span { font-size:13px; color:var(--gray3); }
+.ref-meta span strong { color:var(--black); font-weight:700; }
+
+.ref-summary {
+  margin-bottom:40px; padding:36px 40px; background:var(--white);
+  border-radius:16px; border:1px solid var(--border); border-left:4px solid var(--red);
+}
+.ref-summary-label { font-size:10px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--red); margin-bottom:16px; }
+.ref-summary-body { font-size:13.5px; color:#333; line-height:1.9; }
+
+.ref-questions { display:flex; flex-direction:column; gap:14px; }
+.ref-q {
+  padding:36px 40px; border:1.5px solid var(--border);
+  border-radius:16px; background:var(--white);
+  transition:border-color 0.2s, box-shadow 0.2s;
+}
+.ref-q:hover { border-color:var(--red); box-shadow:0 4px 24px rgba(204,0,0,0.07); }
+.ref-q-num { font-size:10px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--red); margin-bottom:10px; }
+.ref-q-text { font-size:18px; font-weight:700; color:var(--black); margin-bottom:20px; line-height:1.3; letter-spacing:-0.3px; }
+.ref-q-answer { font-size:14px; color:#444; line-height:1.9; }
+
 /* ── FOOTER ── */
 footer {
   background:var(--black); padding:60px 80px;
-  display:flex; justify-content:space-between; align-items:flex-start;
-  gap:40px;
+  display:flex; justify-content:space-between; align-items:flex-start; gap:40px;
 }
 .footer-logo { font-size:28px; font-weight:900; letter-spacing:-1px; color:var(--white); }
 .footer-logo span { color:var(--red); }
@@ -240,14 +219,12 @@ footer {
   * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
   nav { display:none !important; }
   .hero { min-height:auto; padding:60px 60px 80px; page-break-after:always; }
-  .section { padding:60px 60px; page-break-inside:avoid; }
+  .section { padding:60px; page-break-inside:avoid; }
   .pain-card { break-inside:avoid; }
   .pain-details { max-height:none !important; opacity:1 !important; }
   .charts-row { grid-template-columns:1fr 1fr; }
   .hearing-grid { grid-template-columns:repeat(3,1fr); }
-  body { font-size:12px; }
   .fade-up { opacity:1 !important; transform:none !important; }
-  .opp-item:hover { padding-left:0; }
 }
 
 @media (max-width:900px) {
@@ -258,6 +235,8 @@ footer {
   footer { flex-direction:column; padding:40px 24px; }
   .hero-stats { flex-direction:column; gap:24px; }
   .stat-item { border-right:none; padding-right:0; margin-right:0; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:24px; }
+  .ref-meta { gap:16px; }
+  .ref-summary, .ref-q { padding:28px 24px; }
 }
 </style>
 </head>
@@ -272,6 +251,7 @@ footer {
     <a href="#hearing">Hearing</a>
     <a href="#segments">Segments</a>
     <a href="#opportunities">Opportunities</a>
+    <a href="#reflection">Reflection</a>
   </div>
 </nav>
 
@@ -310,7 +290,7 @@ footer {
 </section>
 
 <!-- CHARTS -->
-<section class="section" id="charts" style="background:var(--gray); border-bottom:none;">
+<section class="section" id="charts" style="background:var(--gray);border-bottom:none;">
   <div class="section-eyebrow fade-up">02 — Data</div>
   <h2 class="section-title fade-up">The Numbers.</h2>
   <p class="section-sub fade-up">Frequency and impact across the top pain points — visualized.</p>
@@ -356,11 +336,82 @@ footer {
 </section>
 
 <!-- OPPORTUNITIES -->
-<section class="section" id="opportunities" style="background:var(--white);">
+<section class="section" id="opportunities">
   <div class="section-eyebrow fade-up">05 — Opportunities</div>
   <h2 class="section-title fade-up">Where Beats Leads Next.</h2>
   <p class="section-sub fade-up">Actionable product and brand directions rooted in what customers actually need.</p>
   <ul class="opp-list" id="oppList"></ul>
+</section>
+
+<!-- REFLECTION -->
+<section class="section" id="reflection" style="background:var(--gray);border-bottom:none;">
+  <div class="section-eyebrow fade-up">06 — Reflection</div>
+  <h2 class="section-title fade-up">The Process Behind It.</h2>
+  <p class="section-sub fade-up">Activity: Generate Your Top 5 Pain-Points Using AI — Beats by Dre Externship.</p>
+
+  <div class="ref-meta fade-up">
+    <span><strong>Student:</strong> Basheer Khan</span>
+    <span><strong>Date:</strong> June 2026</span>
+    <span><strong>Tools Used:</strong> Perplexity AI, Claude LLM</span>
+  </div>
+
+  <div class="ref-summary fade-up">
+    <div class="ref-summary-label">Perplexity Summary — Pain Point Research</div>
+    <div class="ref-summary-body">
+      <p>The following is a structured summary of the most common headphone pain points identified across major premium models including AirPods, Beats, Sony WH-1000XM5, and Bose QuietComfort, drawn from an analysis of 14,000+ customer reviews.</p>
+      <br>
+      <p><strong>Top Pain Points Identified:</strong></p>
+      <br>
+      <p><strong>1. Comfort &amp; Pressure (92%)</strong> — Headphones feel heavy, clamp too tightly, or cause ear/head pressure during long sessions. "The headphones are very good but uncomfortable after an hour."</p>
+      <p><strong>2. Bluetooth Connectivity Drops (88%)</strong> — Audio cuts out, devices disconnect, or pairing is unreliable. "After initial Bluetooth connection I experienced no less than 4 connectivity issues."</p>
+      <p><strong>3. Battery Life &amp; Charging (81%)</strong> — Battery drains faster than expected, case charging is problematic, or longevity declines over time. "AirPods Case battery drain scared me."</p>
+      <p><strong>4. ANC Not Meeting Expectations (79%)</strong> — Active Noise Cancellation doesn't block enough noise in real-world settings or performs inconsistently. "The noise cancellation is worse than the Bose QuietComfort Ultra 2."</p>
+      <p><strong>5. Price vs. Value (74%)</strong> — Customers feel the sound, comfort, or feature set doesn't justify the premium price. "The price point didn't align with their expectations."</p>
+      <p><strong>6. Sound Quality Tuning (70%)</strong> — Bass is too strong, vocals lack clarity, or sound doesn't match the price. "Too bassy and slightly overwhelming."</p>
+      <p><strong>7. Controls &amp; Usability (62%)</strong> — Touch controls misfire, buttons are awkward, or on-device controls feel unreliable. "When I tried to fast-forward, it instead skipped to the next track."</p>
+      <p><strong>8. App &amp; Software Issues (58%)</strong> — Companion apps look outdated, are buggy, or add friction. "The Sony app looks ugly."</p>
+      <p><strong>9. Durability &amp; Build Quality (55%)</strong> — Hinges, earpads, or long-term wear feel fragile. "Durability was a common pain point across premium models."</p>
+      <p><strong>10. Fit &amp; Ear Compatibility (51%)</strong> — Earbuds don't sit right, rotate, or feel uncomfortable for certain ear shapes. "They are bulky, and the shape seems to favor some ears over others."</p>
+      <br>
+      <p>Beyond product features, the research was expanded to address real hearing health risks including noise-induced hearing loss, tinnitus, age-related hearing loss, background noise masking, listening fatigue, and speech clarity gaps — identifying key customer segments: Casual Listeners, Daily Commuters, users with Mild Hearing Loss, Tinnitus/Sensitive users, Older Listeners (50+), and Heavy/Pro users.</p>
+    </div>
+  </div>
+
+  <div class="ref-questions">
+    <div class="ref-q fade-up">
+      <div class="ref-q-num">Question 01</div>
+      <div class="ref-q-text">In completing the task, what steps worked well?</div>
+      <div class="ref-q-answer">
+        What worked best for me was approaching the research from two perspectives simultaneously — not just from the company's internal point of view, but also as an outside consumer. This dual lens helped me ask better questions about how we could actually obtain this data and what key segments we needed to focus on.
+        <br><br>
+        From top to bottom, we redefined the way we built the pain point chart. Rather than accepting surface-level complaints, we pushed deeper — taking the volume of reviews we gathered and converting that raw data into meaningful percentages tied to specific, recurring issues. This turned anecdotal feedback into structured, visual evidence.
+        <br><br>
+        The most effective step was expanding the research beyond a standard pain point list to identify who we are actually working with — breaking customers into real segments and understanding what each group specifically needs. That shift from general complaints to targeted insights made the entire chart far more valuable and actionable.
+      </div>
+    </div>
+
+    <div class="ref-q fade-up">
+      <div class="ref-q-num">Question 02</div>
+      <div class="ref-q-text">What roadblocks did you encounter along the way?</div>
+      <div class="ref-q-answer">
+        The main roadblock was a strategic decision point early in the process: do we stop at building a basic pain point chart, or do we push ourselves to go further — gathering more data, finding deeper insights, and producing something more meaningful and complete?
+        <br><br>
+        A second challenge was tool limitation. Perplexity AI was used initially to pull customer review data, but it struggled to fully understand the scope and direction of what we were trying to achieve. It provided general summaries but lacked the depth and context needed to really drive the research forward in a focused way.
+      </div>
+    </div>
+
+    <div class="ref-q fade-up">
+      <div class="ref-q-num">Question 03</div>
+      <div class="ref-q-text">How did you solve those issues?</div>
+      <div class="ref-q-answer">
+        We solved the strategic challenge by choosing to push further — committing to deeper research rather than stopping at the minimum. This decision is what elevated the output from a simple chart to a full customer insights report.
+        <br><br>
+        For the tool limitation, we transitioned to Claude — a more capable LLM — specifically because it demonstrated a stronger understanding of the research goal. Where Perplexity summarized, Claude analyzed. It was able to synthesize the data into structured findings, identify patterns across customer segments, build frequency percentages from review volume, and surface the hearing health dimension of the research that we felt was the real opportunity for Beats.
+        <br><br>
+        The decision to use Claude was not made lightly — it was a deliberate choice based on the tool's ability to go deeper, think in context, and help us produce research that matched the ambition of the project rather than limiting it.
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- FOOTER -->
@@ -417,7 +468,6 @@ const opportunities = [
   { title:"Ear Health Positioning", text:"Own the narrative: position Beats as the brand that protects your hearing, not just moves it — a meaningful, ownable differentiator in a crowded market." },
 ];
 
-// BUILD PAIN CARDS
 const pg = document.getElementById('painGrid');
 painPoints.forEach(p => {
   const c = document.createElement('div');
@@ -442,7 +492,6 @@ painPoints.forEach(p => {
   pg.appendChild(c);
 });
 
-// BUILD HEARING
 const hg = document.getElementById('hearingGrid');
 hearingData.forEach(h => {
   const d = document.createElement('div');
@@ -451,7 +500,6 @@ hearingData.forEach(h => {
   hg.appendChild(d);
 });
 
-// BUILD TABLE + FILTERS
 const tb = document.getElementById('segTable');
 segments.forEach(s => {
   const tr = document.createElement('tr');
@@ -481,7 +529,6 @@ const fb = document.getElementById('filterBar');
   fb.appendChild(btn);
 });
 
-// BUILD OPPORTUNITIES
 const ol = document.getElementById('oppList');
 opportunities.forEach((o,i) => {
   const li = document.createElement('li');
@@ -490,12 +537,7 @@ opportunities.forEach((o,i) => {
   ol.appendChild(li);
 });
 
-// CHARTS
-const chartDefaults = {
-  grid: 'rgba(0,0,0,0.06)',
-  text: '#6e6e73',
-  fill: 'rgba(204,0,0,0.1)',
-};
+const chartDefaults = { grid:'rgba(0,0,0,0.06)', text:'#6e6e73', fill:'rgba(204,0,0,0.1)' };
 
 new Chart(document.getElementById('radarChart'), {
   type:'radar',
@@ -508,7 +550,7 @@ new Chart(document.getElementById('radarChart'), {
   options:{ responsive:true, plugins:{legend:{display:false}},
     scales:{ r:{ beginAtZero:true, max:100,
       grid:{color:chartDefaults.grid}, angleLines:{color:chartDefaults.grid},
-      pointLabels:{color:chartDefaults.text, font:{size:10, weight:'600'}},
+      pointLabels:{color:chartDefaults.text, font:{size:10,weight:'600'}},
       ticks:{display:false} } } }
 });
 
@@ -522,12 +564,11 @@ new Chart(document.getElementById('barChart'), {
   },
   options:{ indexAxis:'y', responsive:true, plugins:{legend:{display:false}},
     scales:{
-      x:{beginAtZero:true, max:100, grid:{color:chartDefaults.grid}, ticks:{color:chartDefaults.text, font:{size:10}}},
-      y:{grid:{display:false}, ticks:{color:chartDefaults.text, font:{size:10, weight:'600'}}}
+      x:{beginAtZero:true, max:100, grid:{color:chartDefaults.grid}, ticks:{color:chartDefaults.text,font:{size:10}}},
+      y:{grid:{display:false}, ticks:{color:chartDefaults.text,font:{size:10,weight:'600'}}}
     } }
 });
 
-// COUNTERS
 function counter(id, target, dur=2000) {
   const el = document.getElementById(id);
   let s=0, step=target/(dur/16);
@@ -536,7 +577,6 @@ function counter(id, target, dur=2000) {
 }
 setTimeout(()=>{ counter('s1',14038); counter('s2',10); counter('s3',6); counter('s4',7); }, 300);
 
-// SCROLL OBSERVER
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) {
@@ -548,7 +588,6 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold:0.08 });
 document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
 
-// NAV ACTIVE
 const navLinks = document.querySelectorAll('.nav-links a');
 window.addEventListener('scroll', () => {
   let cur='';
